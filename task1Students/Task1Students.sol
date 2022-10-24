@@ -15,11 +15,18 @@ contract Task1Students {
         require(owner == msg.sender, "Only owner has permission!");
         _;
     }
+    
+    modifier notRegistered(address _addr) {
+        Student memory _student = students[_addr];
+        require(!_student.isRegistered, "Address already registered!");
+        _;
+    }    
 
     struct Student {
         string name;
         uint8 totalMarks;
         uint8 percentage;
+        bool isRegistered;
     }
 
     constructor() payable {
@@ -30,8 +37,8 @@ contract Task1Students {
         return students[_studentID];
     }
 
-    function register(address _studentID, string memory _name, uint8 _marks, uint8 _percentage) public onlyOwner {
-        students[_studentID] = Student(_name, _marks, _percentage);
+    function register(address _studentID, string memory _name, uint8 _marks, uint8 _percentage) public onlyOwner notRegistered(_studentID) {
+        students[_studentID] = Student(_name, _marks, _percentage, true);
     }
 
     // to support receiving ETH by default
