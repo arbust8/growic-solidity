@@ -31,6 +31,7 @@ contract Task5Events {
 
     function addFund(uint _amount) public hasEnoughFunds(_amount) meetsFee(_amount) {
         users[msg.sender].funds += _amount;
+        emit FundsDeposited(msg.sender, _amount);
     }
 
     function checkBalance() public view returns (uint) {
@@ -41,6 +42,7 @@ contract Task5Events {
         User storage user = users[msg.sender];
         user.name = _name;
         user.age = _age;
+        emit ProfileUpdated(msg.sender);
     }
 
     function getUserDetails() public view returns (string memory, uint) {
@@ -68,6 +70,9 @@ contract Task5Events {
     constructor() {
         owner = msg.sender;
     }
+    
+    event FundsDeposited(address user, uint256 amount);
+    event ProfileUpdated(address user);    
     
     error NotEnoughFunds();
     error FeeUnmet();
