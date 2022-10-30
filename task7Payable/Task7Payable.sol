@@ -5,7 +5,7 @@ import "hardhat/console.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol"; 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol
 
-contract Task1 {    
+contract Task7Payable {    
 
     address public owner;
 
@@ -21,8 +21,8 @@ contract Task1 {
 
     mapping(address => User) public users;
 
-    function deposit(uint256 _amount) public {
-        balance[msg.sender] += _amount;
+    function deposit() public payable {
+        balance[msg.sender] = msg.sender.balance;
     }
 
     function withdraw(uint _amount) public onlyOwner {
@@ -67,7 +67,7 @@ contract Task1 {
         if(amount > FEE) { _; } else { revert FeeUnmet(); }
     }
 
-    constructor() {
+    constructor() payable {
         owner = msg.sender;
     }
 
