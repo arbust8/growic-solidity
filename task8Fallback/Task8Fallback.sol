@@ -69,7 +69,7 @@ contract Task8Fallback {
 
     constructor() payable {
         owner = msg.sender;
-    }        
+    }
 
     event FundsDeposited(address user, uint256 amount);
     event ProfileUpdated(address user);
@@ -77,7 +77,8 @@ contract Task8Fallback {
     error NotEnoughFunds();
     error FeeUnmet();
 
-    // to support receiving ETH by default
+    event Log(uint gas);
+    
+    fallback() external payable { emit Log(gasleft()); }
     receive() external payable {}
-    fallback() external payable {}
 }
