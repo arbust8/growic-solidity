@@ -55,20 +55,27 @@ contract Task4Modifiers {
         _;
     }
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner has permission!");
+    // with this modifier users can't add funds with zero balance (or less balance than the fund amount specified!)
+    modifier hasEnoughFunds(uint amount) {        
+        if (balance[msg.sender] < amount) { revert NotEnoughFunds(); }
         _;
     }
 
-    modifier meetsFee(uint amount) {
-        // require(amount > FEE, "The amount does not meet the fee cut!");
-        if(amount > FEE) { _; } else { revert FeeUnmet(); }
+    modifier onlyOwner() {
+        if(msg.sender != owner) { revert Unauthorized(); }
+        _;
+    }
+
+    modifier meetsFee(uint amount) {        
+        if(amount < FEE) { revert FeeUnmet(); }
+        _;
     }
 
     constructor() {
         owner = msg.sender;
     }
     
+    error Unauthorized();
     error NotEnoughFunds();
     error FeeUnmet();
 
